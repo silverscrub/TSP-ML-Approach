@@ -1,4 +1,4 @@
-# TSP-Approach
+# TSP-ML-Approach
 Luther Summer Research - Lewis Mai
 
 This project concerns the computational aspect of the Travelling Salesman Problem. The problem asks what is the optimal route to visit every node exactly once in a complete graph of n vertices. 
