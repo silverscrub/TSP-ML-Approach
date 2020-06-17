@@ -1,4 +1,4 @@
-x <- data.frame(x = runif(1000), y = runif(1000))
+x <- data.frame(x = runif(100), y = runif(100))
  ## create a TSP 
  etsp <- ETSP(x) 
  etsp 
