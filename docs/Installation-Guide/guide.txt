@@ -1,0 +1,40 @@
+Getting Concorde to work on MacOS Catalina/Linux Ubuntu (tested on 18.04 and 19.10)
+
+Linear Programming Module QSOPT:
+
+Download from http://www.math.uwaterloo.ca/~bico/qsopt/beta/index.html
+    - Only qsopt.h and qsopt.a are needed 
+    - Put qsopt.h and qsopt.a in to a folder (named QSOPT)
+    - Export the directory of QSOPT into an environment variable for storage 
+        - $ export QSOPTDIR=absolute/path/to/QSOPT
+
+Concorde
+
+Download from http://www.math.uwaterloo.ca/tsp/concorde/downloads/downloads.htm
+    - File: Concorde-03.12.19  (date: Dec 19, 2003) 
+    - It will be downloaded as co031219.tgz
+    - On terminal, run 
+        - $ gunzip co031219.tgz
+        - $ tar xvf co031219.tar
+    - The concorde folder should appear as a result
+    - cd into concorde folder 
+    - On terminal, run
+        - $ export CFLAGS="-g -O3 -arch x86_64" if on MacOS
+	- $ export CFLAGS="-g -O3 -no-pie" if on Linux Ubuntu
+        - $ ./configure --with-qsopt=$QSOPTDIR 
+        - $ make
+
+
+To test the concorde solver, download the data of any of the tsp file on http://www.math.uwaterloo.ca/tsp/data/index.html  
+    - cd into concorde/TSP 
+    - On terminal, run
+        - $ ./concorde path/to/tsp/file
+
+If this runs, good. You're almost ready. In order to properly run the R code, one has to have "TSP" package in R (one time install with "install.packages("TSP")). At the beginning of each session in RStudio/other R interactive, one have to run the glue code:
+    > library("TSP")
+    > concorde_path("absolute/path/to/concorde/TSP")
+
+note: concorde solver is in the TSP folder. 
+
+EOF
+
