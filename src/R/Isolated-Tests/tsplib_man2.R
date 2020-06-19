@@ -1,12 +1,9 @@
-
+library("TSP")
  ## Write and read data in TSPLIB format
- pts  <- data.frame(x=100*runif(30), y=100*runif(30))
+ pts  <- data.frame(x=100*runif(5), y=100*runif(5))
 ## create TSP, ATSP and ETSP (2D)
 etsp <- ETSP(pts) 
-
-plot(etsp) 
  
- write_TSPLIB(etsp, file="test.tsp")
+ write_TSPLIB(etsp, file="test_5pts.tsp")
 
- r <- read_TSPLIB("test.tsp") 
- plot(r)
+
