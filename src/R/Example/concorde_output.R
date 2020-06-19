@@ -1,0 +1,5 @@
+data("USCA312") 
+## run concorde in verbose mode (-v) with fast cuts only (-V) 
+tour <- solve_TSP(etsp, method = "concorde", control = list(clo = "-v -V"))
+print(as.integer(tour))
+print(tour_length(tour))
