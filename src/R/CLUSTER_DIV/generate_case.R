@@ -1,8 +1,16 @@
 library("TSP")
- ## Write and read data in TSPLIB format
-no <- 100
- pts  <- data.frame(x=100*runif(no), y=100*runif(no))
-## create TSP, ATSP and ETSP (2D)
-etsp <- ETSP(pts) 
- 
-write_TSPLIB(etsp, file="main.tsp")
+ ## Write test data in TSPLIB format
+
+no <- c(100)
+for(i in no){
+        each <-1
+        for (j in  1:each){
+
+                pts  <- data.frame(x=100*runif(i), y=100*runif(i))
+                ## create TSP, ATSP and ETSP (2D)
+                etsp <- ETSP(pts)
+                file_name <- "main.tsp"
+                write_TSPLIB(etsp, file=file_name)
+
+        }
+}
