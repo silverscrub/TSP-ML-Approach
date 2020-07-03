@@ -1,7 +1,7 @@
 library("TSP")
  ## Write test data in TSPLIB format
 
-no <- c(100)
+no <- c(20)
 for(i in no){
         each <-1
         for (j in  1:each){

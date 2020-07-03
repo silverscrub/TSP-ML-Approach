@@ -52,7 +52,7 @@ angle_pts <- function(pt1,pt2){
         }
 }
 
-radius <-2
+radius <-9
 
 pivot_point <- values(pointSet, keys =1)
 
@@ -241,12 +241,23 @@ while (length(checklist) != 0){
 end_time <- Sys.time()
 end_time - start_time
 
-
+x <- toString(length(current_tree))
+cap <- nchar(x, type = "chars")
 for (branchNo in 1:length(current_tree)){
+    branchNum <- toString(branchNo)
+    if (cap >1){
+        times <- cap - nchar(branchNum, type="chars")
+        if (times != 0) {
+    		for (t in 1:times){
+            		branchNum <- paste0("0", toString(branchNum))
+        	}
+	}
+    }	
+
     pts  <- data.frame(x=c(), y=c())
     if ( length(current_tree[[branchNo]]) <=2){
         ##write solution to be the same as the output to .sol file
-        file_name <- sprintf("/home/LC/mailo01/TSP-ML-Approach/src/R/CLUSTER_DIV/branch_%s_case_%s.sol",branchNo,1)
+        file_name <- sprintf("/home/LC/mailo01/TSP-ML-Approach/src/R/CLUSTER_DIV/branch_%s_case_%s.sol",branchNum,1)
         
     	if (length(current_tree[[branchNo]]) == 1){
             
@@ -257,7 +268,7 @@ for (branchNo in 1:length(current_tree)){
 
             }
             etsp <- ETSP(pts)
-            file_name <- sprintf("branch_%s_case_%s.tsp",branchNo,1)
+            file_name <- sprintf("branch_%s_case_%s.tsp",branchNum,1)
             write_TSPLIB(etsp, file= file_name)
         }
 
@@ -269,7 +280,7 @@ for (branchNo in 1:length(current_tree)){
 
             }
             etsp <- ETSP(pts)
-            file_name <- sprintf("branch_%s_case_%s.tsp",branchNo,1)
+            file_name <- sprintf("branch_%s_case_%s.tsp",branchNum,1)
             write_TSPLIB(etsp, file= file_name)
 	    
         }
@@ -282,7 +293,88 @@ for (branchNo in 1:length(current_tree)){
 
         }
         etsp <- ETSP(pts)
-        file_name <- sprintf("branch_%s_case_%s.tsp",branchNo,1)
+        file_name <- sprintf("branch_%s_case_%s.tsp",branchNum,1)
         write_TSPLIB(etsp, file= file_name)
     }
 }
+
+system("./solving_subcases.sh")
+
+all_solutions <- scan("/home/LC/mailo01/TSP-ML-Approach/src/R/CLUSTER_DIV/solution_files.txt", what=character())
+
+
+convert_sol_format <- function(content){
+    content <- content[-1]
+    for (index in 1:length(content)){
+        content[[index]] <- content[[index]] + 1
+    }
+    return(as.TOUR(as.integer(content)))
+}
+
+get_solutions <- function(){
+    len <-length(all_solutions)
+    all_solution_tours <- list(list())
+    for (index in 1:len){
+        individual_tour <- convert_sol_format(scan(all_solutions[[index]]))
+        all_solution_tours[[index]] <- individual_tour
+    }
+    return(all_solution_tours)
+}
+
+to_global <- function(tour_list){
+	for (tour_index in 1:length(tour_list)){
+		for (vertex_index in 1:length(tour_list[[tour_index]])){
+			vertex <- as.integer(tour_list[[tour_index]][vertex_index])
+			tour_list[[tour_index]][vertex_index] <- current_tree[[tour_index]][vertex]
+		}
+	}
+	return(tour_list)
+} 
+
+end_pt <-function(edgeNo){
+	if (edgeNo == length(branch1)){
+                            end <- 1
+                }else{
+                        end <- edgeNo+1}
+	return(end)
+}
+
+connect <- function(branch1, branch2){
+ 	current_best_choice <- list()
+	for (edgeNo1 in 1:length(branch1)){
+		end1 <- end_pt(edgeNo)
+		pt1a <- branch1[[edgeNo1]]
+		pt1b <- branch1[[end1]]
+		edge1 <- c(pt1a,pt1b)
+		pt1a_coor <- values(pointSet, keys= pt1a)  
+		pt1b_coor <-values(pointSet, keys= pt1b)
+
+		for (edgeNo2 in 1:length(branch2)){
+			end2 <- end_pt(edgeNo)
+                	pt2a <- branch2[[edgeNo2]]
+                	pt2b <- branch2[[end2]]
+                	edge2 <- c(pt2a,pt2b)
+                	pt2a_cor <- values(pointSet, keys= pt2a)
+                	pt2b_cor <-values(pointSet, keys= pt2b)
+                	
+
+			dist1a2a <- dist_pts(pt1a_coor,pt2a_coor)
+			dist1a2b <- dist_pts(pt1a_coor,pt2b_coor)
+			dist1b2a <- dist_pts(pt1b_coor,pt2b_coor)
+			dist1b2b <- dist_pts(pt1b_coor,pt2b_coor)
+			
+			choice1_cost <-dist1a2a + dist1b2b
+			choice2_cost <-dist1a2b + dist1b2a
+			if ((choice1_cost) < (choice2_cost)){
+				to_compare <- c(choice1_cost, pt1a2a, pt1b2b,)
+			} else {
+				to_compare <- c(choice2_cost, pt1a2b, pt1b2a)
+			
+			}
+
+			if length(current_best_choice <- 
+		}
+	}
+}
+sol <- get_solutions()
+sorted_tree <- to_global(sol)
